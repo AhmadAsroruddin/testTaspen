@@ -1,5 +1,6 @@
 package com.ari;
 
+import javax.security.auth.login.CredentialNotFoundException;
 import java.util.*;
 
 import static java.util.Collections.replaceAll;
@@ -27,6 +28,7 @@ public class SortingChar {
 
         Map<Integer, List<Character>> groupedMap = new HashMap<>();
 
+        //PENGELOMPOKAN
         for(Map.Entry<Character, Integer> entry : splittingResult.entrySet()){
             Character key = entry.getKey();
             int value = entry.getValue();
@@ -35,7 +37,7 @@ public class SortingChar {
             }
             groupedMap.get(value).add(key);
         }
-
+        //PENGURUTAN HURUF
         for (Map.Entry<Integer, List<Character>> entryValue : groupedMap.entrySet()) {
             for (int i = 0; i < entryValue.getValue().size(); i++) {
                 for (int j = 0; j < entryValue.getValue().size() - i - 1; j++) {
@@ -49,12 +51,20 @@ public class SortingChar {
 
         }
 
-        for(int x = groupedMap.size()+1; x >= 0; x--){
-            if(groupedMap.containsKey(x)){
-                List<Character> listChar = groupedMap.get(x);
-                for(Character c : listChar){
-                    result += c;
+
+        List<Map.Entry<Integer, List<Character>>> list = new ArrayList<>(groupedMap.entrySet());
+        for (int i = 0; i < list.size() - 1; i++) {
+            for (int j = 0; j < list.size() - i - 1; j++) {
+                if (list.get(j).getKey() < list.get(j + 1).getKey()) {
+                    Map.Entry<Integer, List<Character>> temp = list.get(j);
+                    list.set(j, list.get(j + 1));
+                    list.set(j + 1, temp);
                 }
+            }
+        }
+        for (Map.Entry<Integer, List<Character>> entry : list) {
+            for(int x = 0; x < entry.getValue().size(); x++){
+                result += entry.getValue().get(x);
             }
         }
 
